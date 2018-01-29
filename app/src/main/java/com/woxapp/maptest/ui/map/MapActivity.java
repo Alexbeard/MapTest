@@ -31,6 +31,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private Dialog dialog;
     private MapContract.Presenter presenter;
     private MapController mapController;
+    private boolean isWayDrawn = false;
 
 
     @Override
@@ -99,6 +100,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         mapController.addPolyline(result);
         mapController.positionCamera(result.routes[0]);
         mapController.setAnimation(result, R.drawable.ic_car);
+        isWayDrawn = true;
     }
 
 
@@ -158,7 +160,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         });
 
         customAutocomplete.geoAutocompleteClear.setOnClickListener(v -> {
-            mapController.clearMarker(customAutocomplete.autocomplete.getText().toString());
+            if (isWayDrawn) {
+                clearAll();
+            } else {
+                mapController.clearMarker(customAutocomplete.autocomplete.getText().toString());
+            }
             customAutocomplete.autocomplete.setText("");
         });
     }
